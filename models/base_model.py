@@ -22,7 +22,7 @@ class BaseModel:
 
     def to_dict(self):
         """open the book"""
-        str(datetime.datetime.isoformat(self.created_at))
-        str(datetime.datetime.isoformat(self.updated_at))
+        self.created_at = str(datetime.datetime.isoformat(self.created_at))
+        self.updated_at = str(datetime.datetime.isoformat(self.updated_at))
         self.__dict__['__class__'] = __class__.__name__
         return self.__dict__
