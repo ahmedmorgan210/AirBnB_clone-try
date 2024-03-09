@@ -7,7 +7,7 @@ import os.path
 class FileStorage:
     """the store to by"""
     def __init__(self) -> None:
-        self.file_path = "../../"
+        self.file_path = ""
         self.objects = {}
 
     @property
@@ -38,7 +38,7 @@ class FileStorage:
         """keep at order"""
         with open("file.json", mode="w") as file:
             json.dump(self.__objects, file)
-        self.file_path = file
+        self.file_path = "../../{file}"
     
     def reload(self):
         """try to be again"""
