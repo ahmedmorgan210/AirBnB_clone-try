@@ -7,7 +7,7 @@ import os.path
 class FileStorage:
     """the store to by"""
     def __init__(self) -> None:
-        self.file_path = ""
+        self.file_path = "../../file.json"
         self.objects = {}
 
     @property
