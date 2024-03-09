@@ -2,7 +2,7 @@
 # Base cls
 import uuid
 import datetime
-
+from models import storage
 
 class BaseModel:
     """base is important"""
@@ -12,6 +12,8 @@ class BaseModel:
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at = datetime.datetime.now()
+        if self.id not in self.__dict__['id']:
+            storage.new(self)
 
         if kwargs is not None:
             for key, value in kwargs.items():
@@ -22,14 +24,15 @@ class BaseModel:
 
                 setattr(self, key, value)
 
-
     def __str__(self) -> str:
         """come to pri"""
         return f"[{__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """rmmber me"""
+        storage.save()
         self.updated_at = datetime.datetime.now()
+        #storage.save()
 
     def to_dict(self):
         """open the book"""
