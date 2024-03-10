@@ -2,29 +2,29 @@
 """lets play with stor"""
 import json
 import os.path
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.city import City
+from models.state import State
+from models.amenity import Amenity
+from models.review import Review
 
+classes = {
+    "BaseModel": BaseModel,
+    "User": User,
+    "City": City,
+    "Place": Place,
+    "Amenity": Amenity,
+    "Review": Review,
+    "State": State
+    }
 
 class FileStorage:
     """the store to by"""
     def __init__(self) -> None:
-        self.file_path = ""
-        self.objects = {}
-
-    @property
-    def file_path(self):
-        return self.__file_path
-
-    @file_path.setter
-    def file_path(self, value):
-        self.__file_path = value
-
-    @property
-    def objects(self):
-        return self.__objects
-
-    @objects.setter
-    def objects(self, value):
-        self.__objects = value
+        self.__file_path = "file.json"
+        self.__objects = {}
 
     def all(self):
         """thats all"""
@@ -32,18 +32,30 @@ class FileStorage:
 
     def new(self, obj):
         """omg its new"""
-        self.__objects.__dict__[__class__.__name__.id] = obj
+        self.__objects[f"{obj.__class__.__name__}.{obj.id}"] = obj
 
     def save(self):
         """keep at order"""
-        with open("file.json", mode="w") as file:
-            json.dump(self.__objects, file)
-        self.file_path = "../../{file}"
+        data = {}
+        for key, value in self.__objects.items():
+            data[key] = value.to_dict()
+
+        with open(self.__file_path, mode='w', encoding='UTF-8') as file:
+            json.dump(data, file)
+        # with open("file.json", mode="w") as file:
+        #     data = {}
+        #     for key, value in self.__objects:
+        #         data[key] = value.to_
+
+
+        # with open("file.json", mode="w") as file:
+        #     json.dump(self.__objects, file)
+        # self.__file_path = "../../{file}"
     
     def reload(self):
         """try to be again"""
         try:
-            if os.path.isfile(self.file_path):
+            if os.path.isfile(self.__file_path):
                 self.__objects = json.loads("file.json")
         except Exception:
             pass
