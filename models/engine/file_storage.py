@@ -55,7 +55,8 @@ class FileStorage:
     def reload(self):
         """try to be again"""
         try:
-            if os.path.isfile(self.__file_path):
-                self.__objects = json.loads("file.json")
+            with open(self.__file_path, 'r') as f:
+                if os.path.isfile(f):
+                    self.__objects = json.loads(f)
         except Exception:
             pass
