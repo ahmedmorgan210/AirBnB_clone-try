@@ -37,7 +37,6 @@ class BaseModel:
 
     def to_dict(self):
         """open the book"""
-        self.__dict__.copy()
         self.created_at = str(datetime.datetime.isoformat(self.created_at))
         self.updated_at = str(datetime.datetime.isoformat(self.updated_at))
         self.__dict__['__class__'] = __class__.__name__
