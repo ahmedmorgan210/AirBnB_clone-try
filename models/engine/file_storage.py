@@ -36,16 +36,24 @@ class FileStorage:
 
     def save(self):
         """keep at order"""
-        data_dict = {}
-        data_str = ""
+        json_dict = FileStorage.__objects.copy()
+        for key, value in json_dict.items():
+            json_dict[key] = value.to_dict()
 
-        for key, value in self.__objects.items():
-            data_dict[key] = value.to_dict()
+        with open(FileStorage.__file_path, 'w') as data_json:
+            json.dump(json_dict, data_json)
+        # data_dict = {}
+        # data_str = ""
 
-        data_str = json.dumps(data_dict)
+        # for key, value in self.__objects.items():
+        #     data_dict[key] = value.to_dict()
 
-        with open(self.__file_path, 'w') as file:
-            file.write(data_str)
+        # data_str = json.dumps(data_dict)
+
+        # with open(self.__file_path, 'w') as file:
+        #     file.write(data_str)
+
+
         # with open(self.__objects, mode='w', encoding='UTF-8') as file:
         #     self.__file_path = json.dump(data, file)
 
