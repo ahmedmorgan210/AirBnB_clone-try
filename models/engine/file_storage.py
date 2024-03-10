@@ -36,12 +36,20 @@ class FileStorage:
 
     def save(self):
         """keep at order"""
-        data = {}
-        for key, value in self.__objects.items():
-            data[key] = value.to_dict()
+        data_dict = {}
+        data_str = ""
 
-        with open(self.__file_path, mode='w', encoding='UTF-8') as file:
-            json.dump(data, file)
+        for key, value in self.__objects.items():
+            data_dict[key] = value.to_dict()
+
+        data_str = json.dumps(data_dict)
+
+        with open(self.__file_path, 'w') as file:
+            file.write(data_str)
+        # with open(self.__objects, mode='w', encoding='UTF-8') as file:
+        #     self.__file_path = json.dump(data, file)
+
+
         # with open("file.json", mode="w") as file:
         #     data = {}
         #     for key, value in self.__objects:
@@ -55,8 +63,13 @@ class FileStorage:
     def reload(self):
         """try to be again"""
         try:
-            with open(self.__file_path, 'r') as f:
-                if os.path.isfile(f):
-                    self.__objects = json.loads(f)
+            with open(FileStorage.__file_path, 'r') as data_json:
+                FileStorage.__objects = json.load(data_json)
+                for k, v in FileStorage.__objects.items():
+                    FileStorage.__objects[k] = classes[v['__class__']](**v)
+        # try:
+        #     with open(self.__file_path, 'r') as f:
+        #         if os.path.isfile(f):
+        #             self.__objects = json.loads(f)
         except Exception:
             pass
