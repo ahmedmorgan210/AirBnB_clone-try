@@ -23,7 +23,7 @@ classes = {
 class FileStorage:
     """the store to by"""
     def __init__(self) -> None:
-        self.__file_path = "file.json"
+        self.__file_path = "./file.json"
         self.__objects = {}
 
     def all(self):
@@ -36,22 +36,23 @@ class FileStorage:
 
     def save(self):
         """keep at order"""
-        json_dict = FileStorage.__objects.copy()
-        for key, value in json_dict.items():
-            json_dict[key] = value.to_dict()
+        # json_dict = FileStorage.__objects.copy()
+        # for key, value in json_dict.items():
+        #     json_dict[key] = value.to_dict()
 
-        with open(FileStorage.__file_path, 'w') as data_json:
-            json.dump(json_dict, data_json)
-        # data_dict = {}
-        # data_str = ""
+        # with open(FileStorage.__file_path, 'w') as data_json:
+        #     json.dump(json_dict, data_json)
 
-        # for key, value in self.__objects.items():
-        #     data_dict[key] = value.to_dict()
+        data_dict = {}
+        data_str = ""
 
-        # data_str = json.dumps(data_dict)
+        for key, value in self.__objects.items():
+            data_dict[key] = value.to_dict()
 
-        # with open(self.__file_path, 'w') as file:
-        #     file.write(data_str)
+        data_str = json.dumps(data_dict)
+
+        with open(self.__file_path, 'w') as file:
+            file.write(data_str)
 
 
         # with open(self.__objects, mode='w', encoding='UTF-8') as file:
@@ -70,14 +71,27 @@ class FileStorage:
     
     def reload(self):
         """try to be again"""
-        try:
-            with open(FileStorage.__file_path, 'r') as data_json:
-                FileStorage.__objects = json.load(data_json)
-                for k, v in FileStorage.__objects.items():
-                    FileStorage.__objects[k] = classes[v['__class__']](**v)
+
+        dict1 = {}
+        if os.path.exists(self.__file_path):
+            with open(self.__file_path, "r") as f:
+                dict1 = json.loads(f.read())
+            """ convert dict to obj and insert them in __objects """
+            for key, obj_dict in dict1.items():
+                cls = globals()[obj_dict['__class__']]
+                self.__objects[key] = cls(**obj_dict)
         # try:
-        #     with open(self.__file_path, 'r') as f:
-        #         if os.path.isfile(f):
-        #             self.__objects = json.loads(f)
-        except Exception:
-            pass
+        #     with open(FileStorage.__file_path, 'r') as data_json:
+        #         FileStorage.__objects = json.load(data_json)
+        #         for k, v in FileStorage.__objects.items():
+        #             FileStorage.__objects[k] = classes[v['__class__']](**v)
+
+    
+        # # try:
+        # #     with open(self.__file_path, 'r') as f:
+        # #         if os.path.isfile(f):
+        # #             self.__objects = json.loads(f)
+                    
+
+        # except Exception:
+        #     pass
