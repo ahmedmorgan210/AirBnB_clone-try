@@ -22,6 +22,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_help(self, line):
         cmd.Cmd.do_help(self, line)
+
+    def emptyline(self) -> bool:
+        pass
+    
         
 
 if __name__ == '__main__':
